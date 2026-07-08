@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "speckit",
+  "compatibility_date": "2026-07-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  // Build the app before deploying. Cloudflare Workers Builds runs
+  // `npx wrangler deploy` by default, which executes this command first,
+  // producing the Nitro/Cloudflare output in .output/ (and a redirected
+  // config at .wrangler/deploy/config.json). Without this, wrangler tries
+  // to auto-scaffold the project and fails editing the Lovable vite config.
+  "build": { "command": "npm run build" },
+  // Prebuilt Nitro worker output (used on a clean checkout; when the
+  // redirected config from the build is present, wrangler uses that instead).
+  "main": ".output/server/index.mjs",
+  "assets": { "binding": "ASSETS", "directory": ".output/public" },
+  "no_bundle": true,
+  "rules": [{ "type": "ESModule", "globs": ["**/*.mjs", "**/*.js"] }]
+}
